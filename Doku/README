@@ -1,1 +1,6 @@
 Servoansteuerung für 2x Servo-Motoren angesteuert über einen Kreuzhebelschalter
+
+Kreuzhebelschalter = Part No. 300202 ~ 3150RAK600
+    Vss     = 5VDC
+    Gain    = +-50% -> Output 0-5VDC
+    (Siehe Datenblatt unter Doku)
