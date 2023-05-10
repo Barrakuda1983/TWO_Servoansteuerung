@@ -14,7 +14,7 @@ Servo servo2;
 int pot1 = A0;  
 int pot2 = A1;
 int centerDet = 13;
-// Hysterese für Mittelausstellung 
+// Hysterese für Mittelpunktaussteuerung 
 int hyst = 50;
 
 void setup() {
