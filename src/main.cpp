@@ -14,6 +14,8 @@ Servo servo2;
 int pot1 = A0;  
 int pot2 = A1;
 int centerDet = 13;
+// Hysterese für Mittelausstellung 
+int hyst = 50;
 
 void setup() {
   pinMode(pot1, INPUT);
@@ -23,35 +25,44 @@ void setup() {
   // Anschluss Servomotoren digitale Pins + Einstellung min- max-Werte Servo
   servo1.attach(6, 900, 2100);
   servo2.attach(9, 900, 2100);
-  // Serial.begin(9600);                                  // zum debuggen
+  //Serial.begin(9600);                                  // zum debuggen
 }
 
 void loop() {
   // Lesen Analogwert Kreuz-Hebel-Schalter
-  int pot1ValA = analogRead(pot1);
-  int pot2ValA = analogRead(pot2);
-  // Serial.println((String)"Pot1 = " + pot1ValA);        // zum debuggen
-  // Serial.println((String)"Pot2 = " + pot2ValA);        // zum debuggen
-  
+  int pot1Val = analogRead(pot1);
+  int pot2Val = analogRead(pot2);
+    
   int servo1Pos;
   int servo2Pos;
-    
-  if (digitalRead(centerDet) == HIGH){
-    // Übersetzung Analogwerte >> Servowinkel
-    servo1Pos = map(pot1ValA, 300, 1023, 0, 180);
-    servo2Pos = map(pot2ValA, 300, 1023, 0, 180);
-  }
-  else {
-    servo1Pos = 90;
+  int delayL = 517 - hyst;
+  int delayH = 517 + hyst;
+
+  if (digitalRead((centerDet) == HIGH)){
+  
+    if (pot1Val <= delayL || pot1Val >= delayH){
+    servo1Pos = map(pot1Val, 0, 1023, 0, 180);
+    }
+    else {
+      servo1Pos = 90;
+    }
+    if (pot2Val <= delayL || pot2Val >= delayH){
+    servo2Pos = map(pot2Val, 0, 1023, 0, 180);
+    }
+    else {
     servo2Pos = 90;
+    } 
   }
-  // Serial.println((String)"Servo1Pos = " + servo1Pos);  // zum debuggen
-  // Serial.println((String)"Servo2Pos = " + servo2Pos);  // zum debuggen
+  //Serial.print((String)"    CenterDet = " + centerDet);  // zum debuggen
+  //Serial.print((String)"    Servo1Pos = " + servo1Pos);  // zum debuggen
+  //Serial.print((String)"    Pot1 = " + pot1Val);        // zum debuggen
+  //Serial.print((String)"    Servo2Pos = " + servo2Pos);  // zum debuggen
+  //Serial.println((String)"  Pot2 = " + pot2Val);        // zum debuggen
 
   // Ansteuerung Servomotoren
   servo1.write(servo1Pos);
   servo2.write(servo2Pos);
   
   // Kurze Pause zur besseren Kontrolle, ggf. nach Motortyp anpassen
-  delay(30);
+  delay(20);
 }
